@@ -1,8 +1,5 @@
-const a = 2;
-const b = 4;
-
-function sum() {
-    return a + b;
-}
-
-sum();
+export const search = () => {};
+export const searchAlbums = () => {};
+export const searchArtists = () => {};
+export const searchTracks = () => {};
+export const searchPlaylists = () => {};

@@ -75,3 +75,5 @@ typings/
 # Nyc test coverage
 .nyc_output
 coverage
+
+keys/
