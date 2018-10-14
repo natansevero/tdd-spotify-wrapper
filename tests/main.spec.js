@@ -1,9 +1,16 @@
 /* eslint-env mocha */
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import sinonStubPromise from 'sinon-stub-promise';
 import {
     search, searchAlbums, searchArtists, searchTracks, searchPlaylists,
 } from '../src/main';
-// import spotifyoauthtoken from '../keys';
+
+chai.use(sinonChai);
+sinonStubPromise(sinon);
+
+global.fetch = require('node-fetch');
 
 describe('Spotify Wrapper', () => {
     describe('smoke tests', () => {
@@ -31,6 +38,28 @@ describe('Spotify Wrapper', () => {
 
         it('should exists the searchPlaylists method', () => {
             expect(searchPlaylists).to.exist;
+        });
+    });
+
+    describe('Generic Search', () => {
+        it('should call fetch function', () => {
+            // Apenas pra verificar se o metodo foi chamado
+            const fetchStub = sinon.stub(global, 'fetch');
+            search();
+            expect(fetchStub).to.have.been.calledOnce;
+            fetchStub.restore();
+        });
+
+        it('should receive the correct url to fetch', () => {
+            const fetchStub = sinon.stub(global, 'fetch');
+
+            search('Muse', 'artist');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=artist');
+
+            search('Muse', 'album');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=album');
+
+            fetchStub.restore();
         });
     });
 });
