@@ -43,10 +43,12 @@ describe('Spotify Wrapper', () => {
 
     describe('Generic Search', () => {
         let fetchStub;
+        let promise;
 
         beforeEach(() => {
             // Apenas pra verificar se o metodo foi chamado
             fetchStub = sinon.stub(global, 'fetch');
+            promise = fetchStub.returnsPromise();
         });
 
         afterEach(() => {
@@ -71,6 +73,12 @@ describe('Spotify Wrapper', () => {
                 search('Muse', ['album', 'artist']);
                 expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=album,artist');
             });
+        });
+
+        it('should return the JSON Data from the Promise', () => {
+            promise.resolves({ body: 'json' });
+            const artists = search('Muse', 'artist');
+            expect(artists.resolveValue).to.be.eql({ body: 'json' });
         });
     });
 });
