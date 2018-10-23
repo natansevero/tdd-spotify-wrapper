@@ -13,6 +13,19 @@ sinonStubPromise(sinon);
 global.fetch = require('node-fetch');
 
 describe('Spotify Wrapper', () => {
+    let fetchStub;
+    let promise;
+
+    beforeEach(() => {
+        // Apenas pra verificar se o metodo foi chamado
+        fetchStub = sinon.stub(global, 'fetch');
+        promise = fetchStub.returnsPromise();
+    });
+
+    afterEach(() => {
+        fetchStub.restore();
+    });
+
     describe('smoke tests', () => {
         // search (generic) more taht one type
         // searchAlbums
@@ -42,19 +55,6 @@ describe('Spotify Wrapper', () => {
     });
 
     describe('Generic Search', () => {
-        let fetchStub;
-        let promise;
-
-        beforeEach(() => {
-            // Apenas pra verificar se o metodo foi chamado
-            fetchStub = sinon.stub(global, 'fetch');
-            promise = fetchStub.returnsPromise();
-        });
-
-        afterEach(() => {
-            fetchStub.restore();
-        });
-
         it('should call fetch function', () => {
             search();
             expect(fetchStub).to.have.been.calledOnce;
@@ -79,6 +79,21 @@ describe('Spotify Wrapper', () => {
             promise.resolves({ body: 'json' });
             const artists = search('Muse', 'artist');
             expect(artists.resolveValue).to.be.eql({ body: 'json' });
+        });
+    });
+
+    describe('searchArtists', () => {
+        it('should call fetch function', () => {
+            searchArtists('Muse');
+            expect(fetchStub).to.have.been.calledOnce;
+        });
+
+        it('should call fetc with the correct URL', () => {
+            searchArtists('Muse');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=artist');
+
+            searchArtists('Mutemath');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Mutemath&type=artist');
         });
     });
 });
