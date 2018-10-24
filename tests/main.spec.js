@@ -96,4 +96,49 @@ describe('Spotify Wrapper', () => {
             expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Mutemath&type=artist');
         });
     });
+
+    describe('searchAlbums', () => {
+        it('should call fetch function', () => {
+            searchAlbums('Muse');
+            expect(fetchStub).to.have.been.calledOnce;
+        });
+
+        it('should call fetc with the correct URL', () => {
+            searchAlbums('Muse');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=album');
+
+            searchAlbums('Mutemath');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Mutemath&type=album');
+        });
+    });
+
+    describe('searchTracks', () => {
+        it('should call fetch function', () => {
+            searchTracks('Muse');
+            expect(fetchStub).to.have.been.calledOnce;
+        });
+
+        it('should call fetc with the correct URL', () => {
+            searchTracks('Muse');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=track');
+
+            searchTracks('Mutemath');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Mutemath&type=track');
+        });
+    });
+
+    describe('searchPlaylists', () => {
+        it('should call fetch function', () => {
+            searchPlaylists('Muse');
+            expect(fetchStub).to.have.been.calledOnce;
+        });
+
+        it('should call fetc with the correct URL', () => {
+            searchPlaylists('Muse');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=playlist');
+
+            searchPlaylists('Mutemath');
+            expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Mutemath&type=playlist');
+        });
+    });
 });
