@@ -5,14 +5,14 @@ import sinonChai from 'sinon-chai';
 import sinonStubPromise from 'sinon-stub-promise';
 import {
     search, searchAlbums, searchArtists, searchTracks, searchPlaylists,
-} from '../src/main';
+} from '../src/search';
 
 chai.use(sinonChai);
 sinonStubPromise(sinon);
 
 global.fetch = require('node-fetch');
 
-describe('Spotify Wrapper', () => {
+describe('Search', () => {
     let fetchStub;
     let promise;
 
@@ -54,7 +54,7 @@ describe('Spotify Wrapper', () => {
         });
     });
 
-    describe('Generic Search', () => {
+    describe('search', () => {
         it('should call fetch function', () => {
             search();
             expect(fetchStub).to.have.been.calledOnce;
