@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/natansevero/tdd-spotify-wrapper.svg?branch=master)](https://travis-ci.org/natansevero/tdd-spotify-wrapper)
 
+[![Coverage Status](https://coveralls.io/repos/github/natansevero/tdd-spotify-wrapper/badge.svg?branch=master)](https://coveralls.io/github/natansevero/tdd-spotify-wrapper?branch=master)
+
 A wrapper to work with the [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
 
 ## Getting Started
