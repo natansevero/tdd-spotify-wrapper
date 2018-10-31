@@ -13,7 +13,10 @@
     <script src="../dist//spotify-wrapper.umd.js"></script>
 
     <script>
-        const albums = spotifyWrapper.searchAlbums('Muse');
+        const spotify = new spotifyWrapper({
+            token: 'YOUR_TOKEN_HERE'
+        });
+        const albums = spotify.search.albums('Muse');
         const albumsEl = document.getElementById('albums');
 
         albums

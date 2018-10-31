@@ -3,7 +3,7 @@ const path = require('path');
 const include = path.join(__dirname, 'src');
 
 module.exports = {
-    entry: './src/index',
+    entry: './index',
     output: {
         path: path.join(__dirname, 'dist'),
         libraryTarget: 'umd',
