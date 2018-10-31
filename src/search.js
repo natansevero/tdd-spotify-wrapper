@@ -1,16 +1,12 @@
-import API_URL from './config';
-import toJSON from './utils';
+function searcher(type, query) {
+    return this.request(`${this.apiURL}/search?q=${query}&type=${type}`);
+}
 
-export const search = (query, type, spotifyoauthtoken) => global.fetch(`${API_URL}/search?q=${query}&type=${type}`, {
-    headers: {
-        Authorization: `Bearer ${spotifyoauthtoken}`,
-    },
-}).then(toJSON);
-
-export const searchArtists = (query, spotifyoauthtoken) => search(query, 'artist', spotifyoauthtoken);
-
-export const searchAlbums = (query, spotifyoauthtoken) => search(query, 'album', spotifyoauthtoken);
-
-export const searchTracks = (query, spotifyoauthtoken) => search(query, 'track', spotifyoauthtoken);
-
-export const searchPlaylists = (query, spotifyoauthtoken) => search(query, 'playlist', spotifyoauthtoken);
+export default function search() {
+    return {
+        artists: searcher.bind(this, 'artist'),
+        albums: searcher.bind(this, 'album'),
+        tracks: searcher.bind(this, 'track'),
+        playlists: searcher.bind(this, 'playlist'),
+    };
+}

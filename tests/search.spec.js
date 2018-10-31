@@ -3,9 +3,7 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import sinonStubPromise from 'sinon-stub-promise';
-import {
-    search, searchAlbums, searchArtists, searchTracks, searchPlaylists,
-} from '../src/search';
+import SpotifyWrapper from '../src/index';
 
 chai.use(sinonChai);
 sinonStubPromise(sinon);
@@ -13,10 +11,14 @@ sinonStubPromise(sinon);
 global.fetch = require('node-fetch');
 
 describe('Search', () => {
+    let spotify;
     let fetchStub;
     let promise;
 
     beforeEach(() => {
+        spotify = new SpotifyWrapper({
+            token: 'foo',
+        });
         // Apenas pra verificar se o metodo foi chamado
         fetchStub = sinon.stub(global, 'fetch');
         promise = fetchStub.returnsPromise();
@@ -27,117 +29,84 @@ describe('Search', () => {
     });
 
     describe('smoke tests', () => {
-        // search (generic) more taht one type
         // searchAlbums
         // searchArtists
         // searchTracks
         // searchPlaylists
 
-        it('should exists the search method', () => {
-            expect(search).to.exist;
+        it('should exists the spotify.search.albums method', () => {
+            expect(spotify.search.albums).to.exist;
         });
 
-        it('should exists the searchAlbums method', () => {
-            expect(searchAlbums).to.exist;
+        it('should exists the spotify.search.artists method', () => {
+            expect(spotify.search.artists).to.exist;
         });
 
-        it('should exists the searchArtists method', () => {
-            expect(searchArtists).to.exist;
+        it('should exists the spotify.search.tracks method', () => {
+            expect(spotify.search.tracks).to.exist;
         });
 
-        it('should exists the searchTracks method', () => {
-            expect(searchTracks).to.exist;
-        });
-
-        it('should exists the searchPlaylists method', () => {
-            expect(searchPlaylists).to.exist;
+        it('should exists the spotify.search.playlists method', () => {
+            expect(spotify.search.playlists).to.exist;
         });
     });
 
-    describe('search', () => {
+    describe('spotify.search.artists', () => {
         it('should call fetch function', () => {
-            search();
-            expect(fetchStub).to.have.been.calledOnce;
-        });
-
-        it('should receive the correct url to fetch', () => {
-            context('passing one type', () => {
-                search('Muse', 'artist');
-                expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=artist');
-
-                search('Muse', 'album');
-                expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=album');
-            });
-
-            context('passing more than one type', () => {
-                search('Muse', ['album', 'artist']);
-                expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=album,artist');
-            });
-        });
-
-        it('should return the JSON Data from the Promise', () => {
-            promise.resolves({ body: 'json' });
-            const artists = search('Muse', 'artist');
-            expect(artists.resolveValue).to.be.eql({ body: 'json' });
-        });
-    });
-
-    describe('searchArtists', () => {
-        it('should call fetch function', () => {
-            searchArtists('Muse');
+            spotify.search.artists('Muse');
             expect(fetchStub).to.have.been.calledOnce;
         });
 
         it('should call fetc with the correct URL', () => {
-            searchArtists('Muse');
+            spotify.search.artists('Muse');
             expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=artist');
 
-            searchArtists('Mutemath');
+            spotify.search.artists('Mutemath');
             expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Mutemath&type=artist');
         });
     });
 
-    describe('searchAlbums', () => {
+    describe('spotify.search.albums', () => {
         it('should call fetch function', () => {
-            searchAlbums('Muse');
+            spotify.search.albums('Muse');
             expect(fetchStub).to.have.been.calledOnce;
         });
 
         it('should call fetc with the correct URL', () => {
-            searchAlbums('Muse');
+            spotify.search.albums('Muse');
             expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=album');
 
-            searchAlbums('Mutemath');
+            spotify.search.albums('Mutemath');
             expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Mutemath&type=album');
         });
     });
 
-    describe('searchTracks', () => {
+    describe('spotify.search.tracks', () => {
         it('should call fetch function', () => {
-            searchTracks('Muse');
+            spotify.search.tracks('Muse');
             expect(fetchStub).to.have.been.calledOnce;
         });
 
         it('should call fetc with the correct URL', () => {
-            searchTracks('Muse');
+            spotify.search.tracks('Muse');
             expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=track');
 
-            searchTracks('Mutemath');
+            spotify.search.tracks('Mutemath');
             expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Mutemath&type=track');
         });
     });
 
-    describe('searchPlaylists', () => {
+    describe('spotify.search.playlists', () => {
         it('should call fetch function', () => {
-            searchPlaylists('Muse');
+            spotify.search.playlists('Muse');
             expect(fetchStub).to.have.been.calledOnce;
         });
 
         it('should call fetc with the correct URL', () => {
-            searchPlaylists('Muse');
+            spotify.search.playlists('Muse');
             expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=playlist');
 
-            searchPlaylists('Mutemath');
+            spotify.search.playlists('Mutemath');
             expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Mutemath&type=playlist');
         });
     });
